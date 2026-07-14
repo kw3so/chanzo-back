@@ -1,24 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+import {PrismaClient} from "../../generated/prisma/client.ts"
 
-const prisma = new PrismaClient({
-  log:
-    process.env.NODE_ENV === "development"
-      ? ["query", "warn", "error"]
-      : ["error"],
-});
+import { PrismaPg } from "@prisma/adapter-pg";
 
-const connectDB = async () => {
-  try {
-    await prisma.$connect();
-    console.log("DB connected via Prisma");
-  } catch (error) {
-    console.error("Couldn't connect to DB", error);
-    process.exit(1);
-  }
-};
+const connectionString = process.env.DATABASE_URL;
 
-const disconnectDB = async () => {
-  await prisma.$disconnect();
-};
+const adapter = new PrismaPg(connectionString);
 
-export { prisma, connectDB, disconnectDB };
+export const prisma = new PrismaClient({ adapter });
