@@ -2,7 +2,7 @@ import {PrismaClient} from "../../generated/prisma/client.ts"
 
 import { PrismaPg } from "@prisma/adapter-pg";
 
-const connectionString = (process.env.APP === "development")
+const connectionString = (process.env.APP_ENV === "development")
   ? process.env.DEV_DATABASE_URL
   : process.env.DATABASE_URL;
 
