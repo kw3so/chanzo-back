@@ -1,64 +1,50 @@
 import "dotenv/config";
-import express from "express";
-// import { connectDB, disconnectDB } from "./config/db.js";
-import { parseFeed } from "./utils/getFeedArray.js";
-import cors from "cors";
-
-// IMPORTING ROUTES
-import feedsArrayRoutes from "./routes/feedsArrayRoutes.js";
+import app from "./app.js";
+import { connectDB, disconnectDB } from "./config/db.js";
 import "./cron/fetchAndClusterCron.js";
 
-// config();
-// connectDB();
+const PORT = process.env.PORT || 3003;
 
-const app = express();
+let server;
 
-const localhost = process.env.LOCALHOST_FRONT;
-const remotehost = process.env.REMOTEHOST_FRONT;
+const startServer = async () => {
+  await connectDB();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(
-  cors({
-    origin: [localhost, remotehost],
-    methods: ["GET"],
-  }),
-);
+  server = app.listen(PORT, () => {
+    console.log(`Server is running on PORT ${PORT}`);
+  });
+};
 
-// USE OF IMPORTED ROUTES
-app.use("/ropie", feedsArrayRoutes);
+const shutdown = async (signal) => {
+  console.log(`${signal} received - shutting down server.`);
 
-//Server and fail safes
-//Port config and listening to the server
-const PORT = 3003;
-const server = app.listen(PORT, () => {
-  console.log(`Server is running on PORT ${PORT}`);
-}); //We need to create an instance of the server so that we can handle the instance errors.
+  if (server) {
+    server.close(async () => {
+      await disconnectDB();
+      process.exit(0);
+    });
+    return;
+  }
 
-// //Handle unhandled promise rejection
-// process.on("unhandledRejection", (err) => {
-//   //This happens when a promise is rejected(fails) and there is no error handler attached to it.
-//   console.error(`Unhandled rejection: ${err.message}`);
-//   server.close(async () => {
-//     await disconnectDB();
-//     process.exit(1);
-//   });
-// });
+  await disconnectDB();
+  process.exit(0);
+};
 
-// //Handle uncaught exception
-// process.on("uncaughtException", async (err) => {
-//   //This is when a javascript error is thrown and there is no error handler attached to it.
-//   console.error(`Unhandled exception: ${err.message}`);
-//   await disconnectDB();
-//   process.exit(1);
-// });
+process.on("unhandledRejection", (err) => {
+  console.error(`Unhandled rejection: ${err.message}`);
+  shutdown("unhandledRejection");
+});
 
-// //Gracefully shutdowmn the server on SIGTERM signal
-// process.on("SIGTERM", async () => {
-//   //Unix termination signal used for graceful shutdowns, not an error itself; however, it is often associated with exit codes like 143 in Docker or Kubernetes when applications fail to handle the signal properly.
-//   console.log("SIGTERM received - Shutting down server.");
-//   server.close(async () => {
-//     await disconnectDB();
-//     process.exit(1);
-//   });
-// });
+process.on("uncaughtException", (err) => {
+  console.error(`Unhandled exception: ${err.message}`);
+  shutdown("uncaughtException");
+});
+
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("SIGINT", () => shutdown("SIGINT"));
+
+startServer().catch(async (err) => {
+  console.error(`Failed to start server: ${err.message}`);
+  await disconnectDB();
+  process.exit(1);
+});

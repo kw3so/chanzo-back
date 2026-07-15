@@ -1,4 +1,4 @@
-import {PrismaClient} from "../../generated/prisma/client.ts"
+import { PrismaClient } from "../../generated/prisma/client.ts";
 
 import { PrismaPg } from "@prisma/adapter-pg";
 
@@ -9,3 +9,12 @@ const connectionString = (process.env.APP_ENV === "development")
 const adapter = new PrismaPg(connectionString);
 
 export const prisma = new PrismaClient({ adapter });
+
+export const connectDB = async () => {
+  await prisma.$connect();
+  console.log("DB connected via Prisma");
+};
+
+export const disconnectDB = async () => {
+  await prisma.$disconnect();
+};
