@@ -23,7 +23,7 @@ const { start, end } = getActiveClusterWindow();
 export const getAllClusters = async () => {
   try {
     const clusters = await findAllClusterArticles();
-    return clusters;
+    return { clustersCount: clusters.length, clusters };
   } catch (e) {
     throw new ApiError(500, "Failed to get all clusters", {
       cause: e.message,
@@ -31,12 +31,12 @@ export const getAllClusters = async () => {
   }
 };
 
-export const getThisWeeksCluster = async () => {
+export const getWeeksClusters = async () => {
   console.log(`Cluster duration: ${start} - ${end}`);
 
   try {
-    const weeksCluster = await findArticlesInActiveWindow(start, end);
-    return weeksCluster;
+    const clusters = await findArticlesInActiveWindow(start, end);
+    return { clustersCount: clusters.length, clusters };
   } catch (e) {
     throw new ApiError(500, "Failed to get this week's clusters", {
       cause: e.message,

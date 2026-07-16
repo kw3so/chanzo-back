@@ -1,4 +1,7 @@
-import { getAllClusters } from "../services/cluster.service.js";
+import {
+  getAllClusters,
+  getWeeksClusters,
+} from "../services/cluster.service.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
 export const getAllClustersWithArticles = asyncHandler(async (req, res) => {
@@ -7,6 +10,6 @@ export const getAllClustersWithArticles = asyncHandler(async (req, res) => {
 });
 
 export const getThisWeekClusters = asyncHandler(async (req, res) => {
-  const data = await getThisWeekClusters();
+  const data = await getWeeksClusters();
   return res.status(200).json({ data });
 });

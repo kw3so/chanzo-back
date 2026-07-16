@@ -11,19 +11,23 @@ import {
   fetchFeedFormatted,
   runNewsFeedingAndClustering,
 } from "../controllers/feed.controller.js";
+import { getAllClustersWithArticles, getThisWeekClusters } from "../controllers/cluster.controller.js";
 
 const router = express.Router();
 
-router.get("/feedInArray", getFeedInArray);
+// router.get("/feedInArray", getFeedInArray);
 router.get("/feedContent", fetchFeedFormatted);
 
-router.get("/feedAndCluster", feedandCluster);
+// router.get("/feedAndCluster", feedandCluster);
 router.get("/clusterNewsFeed", runNewsFeedingAndClustering);
 
 router.get("/cronFeedAndCluster", cronAuth, feedandCluster);
 
-router.get("/allClustered", allClustered);
+// router.get("/allClustered", allClustered);
+router.get("/allNewsClusters", getAllClustersWithArticles)
 
-router.get("/weeksClusters", getWeeksClusters);
+// router.get("/weeksClusters", getWeeksClusters);
+router.get("/thisWeeksClusters", getThisWeekClusters);
+
 
 export default router;
