@@ -1,6 +1,8 @@
 import { prisma } from "../config/db.js";
+import { findExistingGuids } from "../prismaRepos/article.repository.js";
+import ApiError from "./ApiError.js";
 
-const deDupeArticle = async (articles) => {
+export const deDupeArticle = async (articles) => {
   const uniqueByGuid = new Map();
 
   for (const article of articles) {
@@ -8,29 +10,21 @@ const deDupeArticle = async (articles) => {
 
     uniqueByGuid.set(article.guid, article);
   }
-
   const uniqueArticles = [...uniqueByGuid.values()];
+  const uniqueGuids = uniqueArticles.map((article) => article.guid);
 
-  if (uniqueArticles.length === 0) {
-    return [];
+  let existingArticlesGuids;
+  try {
+    existingArticlesGuids = await findExistingGuids(uniqueGuids);
+  } catch (e) {
+    throw new ApiError(500, "Failed to findExistingGuids", {
+      cause: e.message,
+    });
   }
 
-  const existingArticles = await prisma.article.findMany({
-    where: {
-      guid: {
-        in: uniqueArticles.map((article) => article.guid),
-      },
-    },
-    select: {
-      guid: true,
-    },
-  });
-
   const existingGuids = new Set(
-    existingArticles.map((article) => article.guid),
+    existingArticlesGuids.map((article) => article.guid),
   );
 
   return uniqueArticles.filter((article) => !existingGuids.has(article.guid));
 };
-
-export { deDupeArticle };

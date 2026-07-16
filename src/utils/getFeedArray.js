@@ -1,19 +1,20 @@
 import Parser from "rss-parser";
+import ApiError from "./ApiError.js";
 
 const parser = new Parser({
   timeout: 10_000,
 });
 
 //Standardize so we push an array of valid items
-const setToSchemaStandard = (item, feedMeta) => {
+const normalizedFeedItem = (item, feedMeta) => {
   const guid = (item.guid || item.link).trim();
   const pubDate = item.pubDate
     ? new Date(item.pubDate)
     : new Date(item.isoDate);
-  const link = item.link;
-  const title = item.title;
-  const sourceName = feedMeta.title;
-  const sourceUrl = feedMeta.link;
+  const link = item.link.trim();
+  const title = item.title.trim();
+  const sourceName = feedMeta.title.trim();
+  const sourceUrl = feedMeta.link.trim();
   return {
     guid,
     pubDate,
@@ -24,23 +25,20 @@ const setToSchemaStandard = (item, feedMeta) => {
   };
 };
 
-const parseFeed = async (feedUrl) => {
+export const parseFeed = async (feedUrl) => {
   let feed;
   try {
     feed = await parser.parseURL(feedUrl);
   } catch (error) {
-    // console.error("ERR AT PARSEFEED", error);
+    throw new ApiError(500, "Failed to parseURL", { cause: error.message });
     return [];
   }
 
-  const schemaApproved = [];
+  const parsedFeedItems = [];
 
   for (const item of feed.items) {
-    schemaApproved.push(setToSchemaStandard(item, feed));
+    parsedFeedItems.push(normalizedFeedItem(item, feed));
   }
 
-  return schemaApproved;
+  return parsedFeedItems;
 };
-
-
-export { parseFeed };

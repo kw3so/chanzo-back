@@ -21,13 +21,3 @@ export const createArticle = async (data) => {
   });
 };
 
-export const createManyArticlesWithClusters = async (items) => {
-  const createdArticles = [];
-
-  for (const item of items) {
-    const createdArticle = await createArticle(item);
-    createdArticles.push(createdArticle);
-  }
-
-  return createdArticles.length;
-};
