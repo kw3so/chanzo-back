@@ -7,10 +7,12 @@ import {
   getWeeksClusters,
 } from "../controllers/allClusteredController.js";
 import { cronAuth } from "../middleware/auth.js";
+import { fetchFeedFormatted } from "../controllers/feed.controller.js";
 
 const router = express.Router();
 
 router.get("/feedInArray", getFeedInArray);
+router.get("/feedContent", fetchFeedFormatted)
 
 router.get("/feedAndCluster", feedandCluster);
 

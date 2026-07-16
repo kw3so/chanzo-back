@@ -2,15 +2,12 @@
 //getFeedInArray-Show it is alive
 //runFeedingandClustering
 
-import {
-  createArticle,
-  createManyArticlesWithClusters,
-} from "../prismaRepos/article.repository";
-import ApiError from "../utils/ApiError";
-import { deDupeArticle } from "../utils/deDupe";
-import { parseFeed } from "../utils/getFeedArray";
-import { assignArticleToCluster } from "./cluster.service";
-import { createFetchRecord } from "../prismaRepos/fetchedFeed.repository";
+import { createArticle } from "../prismaRepos/article.repository.js";
+import ApiError from "../utils/ApiError.js";
+import { deDupeArticle } from "../utils/deDupe.js";
+import { parseFeed } from "../utils/getFeedArray.js";
+import { assignArticleToCluster } from "./cluster.service.js";
+import { createFetchRecord } from "../prismaRepos/fetchedFeed.repository.js";
 
 const getRawFeedsUrls = () => {
   const urls = process.env.RAW_FEEDS?.split(",")
@@ -50,9 +47,9 @@ export const fetchFeedItems = async () => {
 
   return {
     feedCount: urls.length,
+    failedFeedContent: failedItemsCount,
     itemsCount: successItems.length,
     items: successItems,
-    failedFeedContent: failedItemsCount,
   };
 };
 

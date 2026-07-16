@@ -6,7 +6,7 @@ import {
 } from "../prismaRepos/cluster.repository.js";
 import { getActiveClusterWindow } from "../utils/activeClusterWindow.js";
 
-import ApiError from "../utils/ApiError";
+import ApiError from "../utils/ApiError.js";
 import { similarityScore } from "../utils/similarityScore.js";
 
 // const toClusterView = (cluster) => ({
