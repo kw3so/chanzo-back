@@ -1,16 +1,5 @@
 import { prisma } from "../config/db.js";
 
-export const findActiveClusters = async ({ start, end }) => {
-  return prisma.cluster.findMany({
-    where: {
-      createdAt: {
-        gte: start,
-        lt: end,
-      },
-    },
-  });
-};
-
 export const createCluster = async ({ title }) => {
   return prisma.cluster.create({
     data: {
@@ -19,7 +8,18 @@ export const createCluster = async ({ title }) => {
   });
 };
 
-export const findClustersInWindow = async ({ start, end }) => {
+export const findActiveClustersInWindow = async ({ start, end }) => {
+  return prisma.cluster.findMany({
+    where: {
+      createdAt: {
+        gte: start,
+        lt: end,
+      },
+    },
+  });
+};
+
+export const findArticlesInActiveWindow = async ({ start, end }) => {
   return prisma.cluster.findMany({
     where: {
       createdAt: {
@@ -33,15 +33,15 @@ export const findClustersInWindow = async ({ start, end }) => {
   });
 };
 
-export const findAllWithArticles = async () => {
+export const findAllClusterArticles = async () => {
   return prisma.cluster.findMany({
     include: {
       articles: true,
     },
-    orderBy: {
-      articles: {
-        _count: "desc",
-      },
-    },
+    // orderBy: {
+    //   articles: {
+    //     _count: "desc",
+    //   },
+    // },
   });
 };

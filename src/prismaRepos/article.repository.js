@@ -29,5 +29,5 @@ export const createManyArticlesWithClusters = async (items) => {
     createdArticles.push(createdArticle);
   }
 
-  return createdArticles;
+  return createdArticles.length;
 };
