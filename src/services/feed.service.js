@@ -24,7 +24,7 @@ const getRawFeedsUrls = () => {
   return urls;
 };
 
-export const fetchAllFeedItems = async () => {
+export const fetchFeedItems = async () => {
   const urls = getRawFeedsUrls();
 
   const feedResults = await Promise.allSettled(
@@ -49,14 +49,15 @@ export const fetchAllFeedItems = async () => {
   }
 
   return {
+    feedCount: urls.length,
     itemsCount: successItems.length,
     items: successItems,
     failedFeedContent: failedItemsCount,
   };
 };
 
-export const runNewsFeedingAndClustering = async () => {
-  const { items, failedFeedContent } = await fetchAllFeedItems();
+export const newsFeedingAndClustering = async () => {
+  const { items, failedFeedContent } = await fetchFeedItems();
   const nonDuplicatedItems = await deDupeArticle(items);
 
   const createdArticles = [];
@@ -79,4 +80,9 @@ export const runNewsFeedingAndClustering = async () => {
       cause: e.message,
     });
   }
+
+  return {
+    fetchedItems: items.count,
+    ClusteredItems: createdArticles.length,
+  };
 };
