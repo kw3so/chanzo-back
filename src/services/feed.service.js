@@ -60,8 +60,10 @@ export const newsFeedingAndClustering = async () => {
   const createdArticles = [];
   for (const article of nonDuplicatedItems) {
     const clusterId = await assignArticleToCluster(article.title);
+    console.log({...article}, clusterId)
+    
     try {
-      const createdArticle = await createArticle({ ...article, clusterId });
+      const createdArticle = await createArticle({ ...article , clusterId});
       createdArticles.push(createdArticle);
     } catch (e) {
       throw new ApiError(500, "Failed to createArticle", {

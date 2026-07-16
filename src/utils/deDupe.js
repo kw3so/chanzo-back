@@ -11,6 +11,8 @@ export const deDupeArticle = async (articles) => {
     uniqueByGuid.set(article.guid, article);
   }
   const uniqueArticles = [...uniqueByGuid.values()];
+  if (uniqueArticles.length === 0) return [];
+
   const uniqueGuids = uniqueArticles.map((article) => article.guid);
 
   let existingArticlesGuids;

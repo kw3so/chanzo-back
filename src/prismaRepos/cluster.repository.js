@@ -1,6 +1,6 @@
 import { prisma } from "../config/db.js";
 
-export const createCluster = async ({ title }) => {
+export const createCluster = async (title) => {
   return prisma.cluster.create({
     data: {
       title,
