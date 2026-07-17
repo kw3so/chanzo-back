@@ -1,5 +1,5 @@
 import "dotenv/config";
-import "./cron/fetchAndClusterCron.js";
+import "./cron/fetchFeedAndClusterCron.js";
 
 import app from "./app.js";
 

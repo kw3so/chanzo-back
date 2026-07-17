@@ -1,13 +1,12 @@
-// getRawFeeds
-//getFeedInArray-Show it is alive
-//runFeedingandClustering
-
 import { createArticle } from "../prismaRepos/article.repository.js";
-import ApiError from "../utils/ApiError.utils.js";
+import { createFetchRecord } from "../prismaRepos/fetchedFeed.repository.js";
+
+import { assignArticleToCluster } from "./cluster.service.js";
+
 import { deDupeArticle } from "../utils/deDupe.utils.js";
 import { parseRSSFeed } from "../utils/parseRSSFeed.utils.js";
-import { assignArticleToCluster } from "./cluster.service.js";
-import { createFetchRecord } from "../prismaRepos/fetchedFeed.repository.js";
+
+import ApiError from "../utils/ApiError.utils.js";
 
 const getRawFeedsUrls = () => {
   const urls = process.env.RAW_FEEDS?.split(",")
@@ -60,10 +59,10 @@ export const newsFeedingAndClustering = async () => {
   const createdArticles = [];
   for (const article of nonDuplicatedItems) {
     const clusterId = await assignArticleToCluster(article.title);
-    console.log({...article}, clusterId)
-    
+    console.log({ ...article }, clusterId);
+
     try {
-      const createdArticle = await createArticle({ ...article , clusterId});
+      const createdArticle = await createArticle({ ...article, clusterId });
       createdArticles.push(createdArticle);
     } catch (e) {
       throw new ApiError(500, "Failed to createArticle", {
