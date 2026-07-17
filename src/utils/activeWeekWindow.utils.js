@@ -18,7 +18,7 @@ const KenyaMidnighttoUTC = (year, month, date, offsetInMs) => {
   return new Date(Date.UTC(year, month, date) - offsetInMs);
 };
 
-export const getActiveClusterWindow = (now = new Date()) => {
+export const getActiveWeekWindow = (now = new Date()) => {
   const { year, month, date, day, offsetInMs } = getKenyaDateParts(now);
 
   const daysSinceMonday = day === 0 ? 6 : day - 1;

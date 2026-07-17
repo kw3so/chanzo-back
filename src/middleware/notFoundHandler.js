@@ -1,4 +1,4 @@
-import ApiError from "../utils/ApiError.js";
+import ApiError from "../utils/ApiError.utils.js";
 
 export const notFoundHandler = (req, res, next) => {
   next(

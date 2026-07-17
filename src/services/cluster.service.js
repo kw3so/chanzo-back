@@ -4,21 +4,13 @@ import {
   findAllClusterArticles,
   findArticlesInActiveWindow,
 } from "../prismaRepos/cluster.repository.js";
-import { getActiveClusterWindow } from "../utils/activeClusterWindow.js";
 
-import ApiError from "../utils/ApiError.js";
-import { similarityScore } from "../utils/similarityScore.js";
+import { getActiveWeekWindow } from "../utils/activeWeekWindow.utils.js";
+import { similarityScore } from "../utils/similarityScore.utils.js";
 
-// const toClusterView = (cluster) => ({
-//   title: cluster.title,
-//   id: cluster.id,
-//   createdAt: cluster.createdAt,
-//   updatedAt: cluster.updatedAt,
-//   articleCount: cluster.articles.length,
-//   articles: cluster.articles,
-// });
+import ApiError from "../utils/ApiError.utils.js";
 
-const { start, end } = getActiveClusterWindow();
+const { start, end } = getActiveWeekWindow();
 
 export const getAllClusters = async () => {
   try {

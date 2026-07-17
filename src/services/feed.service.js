@@ -3,9 +3,9 @@
 //runFeedingandClustering
 
 import { createArticle } from "../prismaRepos/article.repository.js";
-import ApiError from "../utils/ApiError.js";
-import { deDupeArticle } from "../utils/deDupe.js";
-import { parseFeed } from "../utils/getFeedArray.js";
+import ApiError from "../utils/ApiError.utils.js";
+import { deDupeArticle } from "../utils/deDupe.utils.js";
+import { parseRSSFeed } from "../utils/parseRSSFeed.utils.js";
 import { assignArticleToCluster } from "./cluster.service.js";
 import { createFetchRecord } from "../prismaRepos/fetchedFeed.repository.js";
 
@@ -25,7 +25,7 @@ export const fetchFeedItems = async () => {
   const urls = getRawFeedsUrls();
 
   const feedResults = await Promise.allSettled(
-    urls.map((url) => parseFeed(url)), //Map returns an array
+    urls.map((url) => parseRSSFeed(url)), //Map returns an array
   );
   const successItems = feedResults
     .filter((result) => result.status === "fulfilled")

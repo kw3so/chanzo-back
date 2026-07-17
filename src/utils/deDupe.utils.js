@@ -1,6 +1,6 @@
 import { prisma } from "../config/db.js";
 import { findExistingGuids } from "../prismaRepos/article.repository.js";
-import ApiError from "./ApiError.js";
+import ApiError from "./ApiError.utils.js";
 
 export const deDupeArticle = async (articles) => {
   const uniqueByGuid = new Map();

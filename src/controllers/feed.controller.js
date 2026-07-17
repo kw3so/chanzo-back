@@ -2,7 +2,7 @@ import {
   fetchFeedItems,
   newsFeedingAndClustering,
 } from "../services/feed.service.js";
-import asyncHandler from "../utils/asyncHandler.js";
+import asyncHandler from "../utils/asyncHandler.utils.js";
 
 export const runNewsFeedingAndClustering = asyncHandler(async (req, res) => {
   const data = await newsFeedingAndClustering();

@@ -1,5 +1,5 @@
 import Parser from "rss-parser";
-import ApiError from "./ApiError.js";
+import ApiError from "./ApiError.utils.js";
 
 const parser = new Parser({
   timeout: 10_000,
@@ -25,7 +25,7 @@ const normalizedFeedItem = (item, feedMeta) => {
   };
 };
 
-export const parseFeed = async (feedUrl) => {
+export const parseRSSFeed = async (feedUrl) => {
   let feed;
   try {
     feed = await parser.parseURL(feedUrl);

@@ -1,5 +1,5 @@
 import cron from "node-cron";
-import ApiError from "../utils/ApiError.js";
+import ApiError from "../utils/ApiError.utils.js";
 import { newsFeedingAndClustering } from "../services/feed.service.js";
 
 let cronRunning = false;
