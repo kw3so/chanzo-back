@@ -1,32 +1,29 @@
 import cron from "node-cron";
-import axios from "axios";
+import ApiError from "../utils/ApiError.js";
+import { triggerNewsFeedingAndClustering } from "../services/cron.service.js";
 
-const BASEURL = process.env.APP_URL || "http://localhost:3003";
-const ENDPOINT = "/ropie/cronFeedAndCluster";
+let cronRunning = false;
 
-const feedAndClusterCron = async () => {
+export const fetchFeedAndClusterCron = async () => {
+  if (cronRunning) {
+    throw new ApiError(409, "previous cron is still running ");
+    return;
+  }
 
-
+  cronRunning = true;
   try {
-
-    const response = await axios.get(`${BASEURL}${ENDPOINT}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.CRON_SECRET}`, //Optional however, when dealing with supabase Auth look up something
-      },
-      timeout: 30_000,
+    const status = await triggerNewsFeedingAndClustering();
+    return status;
+  } catch (e) {
+    throw new ApiError(400, "Cron fetch request failed", {
+      cause: e.message,
     });
-    console.log(`Shughuli imekala na: ${response.status}`, response.data);
-  } catch (error) {
-    const status = error.response?.status;
-    const message = error.response?.data || error.message;
-    console.log("error hapa kwa feed and Cluster cron")
+  } finally {
+    cronRunning = false;
   }
 };
 
-cron.schedule("0 * * * *", feedAndClusterCron, {
+cron.schedule("0 * * * *", fetchFeedAndClusterCron, {
   scheduled: true,
   timezone: "Africa/Nairobi",
 });
-
-export { feedAndClusterCron };
