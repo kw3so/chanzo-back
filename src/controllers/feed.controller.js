@@ -7,6 +7,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 export const runNewsFeedingAndClustering = asyncHandler(async (req, res) => {
   const data = await newsFeedingAndClustering();
   return res.status(200).json({ data });
+  
 });
 
 export const fetchFeedFormatted = asyncHandler(async (req, res) => {

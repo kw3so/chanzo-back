@@ -1,7 +1,10 @@
 import "dotenv/config";
-import app from "./app.js";
-import { connectDB, disconnectDB } from "./config/db.js";
 import "./cron/fetchAndClusterCron.js";
+
+import app from "./app.js";
+
+import { connectDB, disconnectDB } from "./config/db.js";
+
 
 const PORT = process.env.PORT || 3003;
 

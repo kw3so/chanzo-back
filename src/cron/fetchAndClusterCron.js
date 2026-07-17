@@ -1,10 +1,10 @@
 import cron from "node-cron";
 import ApiError from "../utils/ApiError.js";
-import { triggerNewsFeedingAndClustering } from "../services/cron.service.js";
+import { newsFeedingAndClustering } from "../services/feed.service.js";
 
 let cronRunning = false;
 
-export const fetchFeedAndClusterCron = async () => {
+const fetchFeedAndClusterCron = async () => {
   if (cronRunning) {
     throw new ApiError(409, "previous cron is still running ");
     return;
@@ -12,8 +12,7 @@ export const fetchFeedAndClusterCron = async () => {
 
   cronRunning = true;
   try {
-    const status = await triggerNewsFeedingAndClustering();
-    return status;
+    await newsFeedingAndClustering();
   } catch (e) {
     throw new ApiError(400, "Cron fetch request failed", {
       cause: e.message,
