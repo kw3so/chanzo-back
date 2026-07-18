@@ -1,12 +1,32 @@
-node_modules
-# Keep environment variables out of version control
-.env
-
+# Prisma files
 generated/prisma
 
-
+#xml files
 *.xml
 
 .myNotes.md
 
-seed
+# OS files
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+vendor/
+
+# Build artifacts
+dist/
+build/
+*.pyc
+__pycache__/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Environment variables
+.env
+.env.local
+
+# Logs
+*.log   
