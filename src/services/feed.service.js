@@ -59,7 +59,6 @@ export const newsFeedingAndClustering = async () => {
   const createdArticles = [];
   for (const article of nonDuplicatedItems) {
     const clusterId = await assignArticleToCluster(article.title);
-    console.log({ ...article }, clusterId);
 
     try {
       const createdArticle = await createArticle({ ...article, clusterId });
