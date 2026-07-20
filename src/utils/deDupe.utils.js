@@ -1,5 +1,5 @@
 import { prisma } from "../config/db.js";
-import { findExistingGuids } from "../prismaRepos/article.repository.js";
+import { filterArticleGuids } from "../services/feed.service.js";
 import ApiError from "./ApiError.utils.js";
 
 export const deDupeArticle = async (articles) => {
@@ -17,7 +17,7 @@ export const deDupeArticle = async (articles) => {
 
   let existingArticlesGuids;
   try {
-    existingArticlesGuids = await findExistingGuids(uniqueGuids);
+    existingArticlesGuids = await filterArticleGuids(uniqueGuids);
   } catch (e) {
     throw new ApiError(500, "Failed to findExistingGuids", {
       cause: e.message,

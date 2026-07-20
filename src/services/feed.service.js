@@ -1,4 +1,7 @@
-import { createArticle } from "../prismaRepos/article.repository.js";
+import {
+  createArticle,
+  findExistingGuids,
+} from "../prismaRepos/article.repository.js";
 import { createFetchRecord } from "../prismaRepos/fetchedFeed.repository.js";
 
 import { assignArticleToCluster } from "./cluster.service.js";
@@ -82,4 +85,8 @@ export const newsFeedingAndClustering = async () => {
     fetchedItems: items.count,
     ClusteredItems: createdArticles.length,
   };
+};
+
+export const filterArticleGuids = async (guids) => {
+  return findExistingGuids(guids);
 };
