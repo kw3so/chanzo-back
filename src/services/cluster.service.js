@@ -24,7 +24,7 @@ export const getAllClusters = async () => {
 };
 
 export const getWeeksClusters = async () => {
-  console.log(`Cluster duration: ${start} - ${end}`);
+  // console.log(`Cluster duration: ${start} - ${end}`);
 
   try {
     const clusters = await findArticlesInActiveWindow(start, end);

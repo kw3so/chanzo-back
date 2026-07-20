@@ -8,7 +8,7 @@ export const createCluster = async (title) => {
   });
 };
 
-export const findActiveClustersInWindow = async ({ start, end }) => {
+export const findActiveClustersInWindow = async ( start, end ) => {
   return prisma.cluster.findMany({
     where: {
       createdAt: {
@@ -19,7 +19,7 @@ export const findActiveClustersInWindow = async ({ start, end }) => {
   });
 };
 
-export const findArticlesInActiveWindow = async ({ start, end }) => {
+export const findArticlesInActiveWindow = async (start, end ) => {
   return prisma.cluster.findMany({
     where: {
       createdAt: {
