@@ -55,36 +55,56 @@ export const fetchFeedItems = async () => {
   };
 };
 
-export const newsFeedingAndClustering = async () => {
-  const { items, failedFeedContent } = await fetchFeedItems();
-  const nonDuplicatedItems = await deDupeArticle(items);
+let clusteringRunning = false;
 
-  const createdArticles = [];
-  for (const article of nonDuplicatedItems) {
-    const clusterId = await assignArticleToCluster(article.title);
+export const newsFeedingAndClustering = async () => {
+  if (clusteringRunning) {
+    throw new ApiError(409, "newsFeedingAndClustering is already running ");
+    return;
+  }
+
+  clusteringRunning = true;
+
+  try {
+    const { items, failedFeedContent } = await fetchFeedItems();
+    const nonDuplicatedItems = await deDupeArticle(items);
+
+    const createdArticles = [];
+    for (const article of nonDuplicatedItems) {
+      const clusterId = await assignArticleToCluster(article.title);
+
+      try {
+        const createdArticle = await createArticle({ ...article, clusterId });
+        createdArticles.push(createdArticle);
+      } catch (e) {
+        throw new ApiError(500, "Failed to createArticle", {
+          cause: e.message,
+        });
+      }
+    }
 
     try {
-      const createdArticle = await createArticle({ ...article, clusterId });
-      createdArticles.push(createdArticle);
+      await createFetchRecord(createdArticles.length);
     } catch (e) {
-      throw new ApiError(500, "Failed to createArticle", {
+      throw new ApiError(500, "Failed to logFetchedFeed", {
         cause: e.message,
       });
     }
-  }
 
-  try {
-    await createFetchRecord(createdArticles.length);
+    return {
+      fetchedItems: items.length,
+      ClusteredItems: createdArticles.length,
+    };
   } catch (e) {
-    throw new ApiError(500, "Failed to logFetchedFeed", {
+    if (e instanceof ApiError) {
+      throw e;
+    }
+    throw new ApiError(500, "failed newsFeedingAndClustering", {
       cause: e.message,
     });
+  } finally {
+    clusteringRunning = false;
   }
-
-  return {
-    fetchedItems: items.count,
-    ClusteredItems: createdArticles.length,
-  };
 };
 
 export const filterArticleGuids = async (guids) => {
