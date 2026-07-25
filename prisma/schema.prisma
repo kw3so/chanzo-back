@@ -47,4 +47,3 @@ model Cluster {
   @@index([createdAt(sort: Desc)])
 }
 
-
