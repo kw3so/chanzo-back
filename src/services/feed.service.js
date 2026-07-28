@@ -66,7 +66,7 @@ export const newsFeedingAndClustering = async () => {
   clusteringRunning = true;
 
   try {
-    const { items, failedFeedContent } = await fetchFeedItems();
+    const { items } = await fetchFeedItems();
     const nonDuplicatedItems = await deDupeArticle(items);
 
     const createdArticles = [];
