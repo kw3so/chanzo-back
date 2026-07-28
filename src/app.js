@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import feedsArrayRoutes from "./routes/feedsArrayRoutes.js";
+import feedsArrayRoutes from "./routes/newsRoutes.js";
 
 import { errorHandler } from "./middleware/errorHandler.js";
 import { notFoundHandler } from "./middleware/notFoundHandler.js";
