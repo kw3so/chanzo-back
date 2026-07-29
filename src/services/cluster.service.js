@@ -10,8 +10,6 @@ import { similarityScore } from "../utils/similarityScore.utils.js";
 
 import ApiError from "../utils/ApiError.utils.js";
 
-const { start, end } = getActiveWeekWindow();
-
 export const getAllClusters = async () => {
   try {
     const clusters = await findAllClusterArticles();
@@ -24,7 +22,8 @@ export const getAllClusters = async () => {
 };
 
 export const getWeeksClusters = async () => {
-  // console.log(`Cluster duration: ${start} - ${end}`);
+  const { start, end } = getActiveWeekWindow();
+  console.log(`Cluster duration: ${start} - ${end}`);
 
   try {
     const clusters = await findArticlesInActiveWindow(start, end);
@@ -37,6 +36,7 @@ export const getWeeksClusters = async () => {
 };
 
 export const assignArticleToCluster = async (articleTitle) => {
+  const { start, end } = getActiveWeekWindow();
   const DICE_THRESHOLD = Number(process.env.DICE_THRESHOLD ?? 0.2);
 
   let activeClusters;
