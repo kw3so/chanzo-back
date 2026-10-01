@@ -9,7 +9,7 @@
   "scripts": {
     "start": "yarn prisma generate && node src/index.js",
     "dev": "nodemon src/index.js",
-    "test": "node --test"
+    "test": "vitest --coverage"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
@@ -22,7 +22,10 @@
     "rss-parser": "^3.13.0"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^5.0.3",
     "nodemon": "^3.1.14",
-    "prisma": "^7.8.0"
+    "prisma": "^7.8.0",
+    "vite": "^8.3.1",
+    "vitest": "^5.0.3"
   }
 }

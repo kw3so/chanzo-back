@@ -1,5 +1,6 @@
 # Prisma files
 generated/prisma
+coverage/
 
 #xml files
 *.xml

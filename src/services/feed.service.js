@@ -1,8 +1,8 @@
 import {
   createArticle,
   findExistingGuids,
-} from "../prismaRepos/article.repository.js";
-import { createFetchRecord } from "../prismaRepos/fetchedFeed.repository.js";
+} from "../repository/article.repository.js";
+import { createFetchRecord } from "../repository/fetchedFeed.repository.js";
 
 import { assignArticleToCluster } from "./cluster.service.js";
 

@@ -3,7 +3,7 @@ import {
   findActiveClustersInWindow,
   findAllClusterArticles,
   findArticlesInActiveWindow,
-} from "../prismaRepos/cluster.repository.js";
+} from "../repository/cluster.repository.js";
 
 import { getActiveWeekWindow } from "../utils/activeWeekWindow.utils.js";
 import { similarityScore } from "../utils/similarityScore.utils.js";
