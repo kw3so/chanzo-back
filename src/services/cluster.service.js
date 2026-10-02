@@ -1,9 +1,4 @@
-import {
-  createCluster,
-  findActiveClustersInWindow,
-  findAllClusterArticles,
-  findArticlesInActiveWindow,
-} from "../repository/cluster.repository.js";
+import * as ClusterRepository from "../repository/cluster.repository.js";
 
 import { getActiveWeekWindow } from "../utils/activeWeekWindow.utils.js";
 import { similarityScore } from "../utils/similarityScore.utils.js";
@@ -12,7 +7,7 @@ import ApiError from "../utils/ApiError.utils.js";
 
 export const getAllClusters = async () => {
   try {
-    const clusters = await findAllClusterArticles();
+    const clusters = await ClusterRepository.findAllClusterArticles();
     return { clustersCount: clusters.length, clusters };
   } catch (e) {
     throw new ApiError(500, "Failed to get all clusters", {
@@ -26,7 +21,7 @@ export const getWeeksClusters = async () => {
   console.log(`Cluster duration: ${start} - ${end}`);
 
   try {
-    const clusters = await findArticlesInActiveWindow(start, end);
+    const clusters = await ClusterRepository.findArticlesInActiveWindow(start, end);
     return { clustersCount: clusters.length, clusters };
   } catch (e) {
     throw new ApiError(500, "Failed to get this week's clusters", {
@@ -41,7 +36,7 @@ export const assignArticleToCluster = async (articleTitle) => {
 
   let activeClusters;
   try {
-    activeClusters = await findActiveClustersInWindow(start, end);
+    activeClusters = await ClusterRepository.findActiveClustersInWindow(start, end);
   } catch (e) {
     throw new ApiError(500, "Failed to findActiveClustersInWindow", {
       cause: e.message,
@@ -64,7 +59,7 @@ export const assignArticleToCluster = async (articleTitle) => {
   }
 
   try {
-    const newCluster = await createCluster(articleTitle);
+    const newCluster = await ClusterRepository.createCluster(articleTitle);
     return newCluster.id;
   } catch (e) {
     throw new ApiError(500, "Failed to createCluster", {
